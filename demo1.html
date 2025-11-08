@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoForo Interuniversitario</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Lato:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-fondo: #FFFFFF;
+            --color-texto: #212529;
+            --color-texto-secundario: #6C757D;
+            --color-bordes: #E9ECEF;
+            --color-primario: #0062FF;
+            --color-secundario: #34A853;
+            --color-acento: #FD7E14;
+            --color-error: #D93025;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--color-fondo);
+            border-bottom: 1px solid var(--color-bordes);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-primario);
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav a {
+            color: var(--color-texto);
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: var(--color-primario);
+        }
+
+        .search-bar {
+            padding: 8px 16px;
+            border: 1px solid var(--color-bordes);
+            border-radius: 24px;
+            font-size: 14px;
+            width: 250px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--color-primario);
+            color: var(--color-primario);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-primario);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primario);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0052D6;
+        }
+
+        .btn-accent {
+            background-color: var(--color-acento);
+            color: white;
+            font-size: 16px;
+            padding: 12px 32px;
+        }
+
+        .btn-accent:hover {
+            background-color: #E66F0A;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(0, 98, 255, 0.1) 0%, rgba(52, 168, 83, 0.1) 100%);
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .hero-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--color-texto);
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--color-texto-secundario);
+            margin-bottom: 32px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Filters */
+        .filters {
+            max-width: 1200px;
+            margin: 48px auto;
+            padding: 0 24px;
+        }
+
+        .filters h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 12px 24px;
+            background-color: var(--color-fondo);
+            border: 2px solid var(--color-bordes);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--color-primario);
+            color: var(--color-primario);
+        }
+
+        .filter-tab.active {
+            background-color: var(--color-primario);
+            color: white;
+            border-color: var(--color-primario);
+        }
+
+        .filter-tab.eco.active {
+            background-color: var(--color-secundario);
+            border-color: var(--color-secundario);
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .video-card {
+            background-color: var(--color-fondo);
+            border: 1px solid var(--color-bordes);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        .video-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-texto);
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .video-author {
+            font-size: 14px;
+            color: var(--color-texto-secundario);
+        }
+
+        .video-tag {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .tag-tics {
+            background-color: rgba(0, 98, 255, 0.1);
+            color: var(--color-primario);
+        }
+
+        .tag-ambiental {
+            background-color: rgba(52, 168, 83, 0.1);
+            color: var(--color-secundario);
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .vote-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-texto-secundario);
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .vote-btn:hover {
+            color: var(--color-primario);
+        }
+
+        .vote-btn.voted {
+            color: var(--color-primario);
+            font-weight: 600;
+        }
+
+        .vote-icon {
+            font-size: 20px;
+        }
+
+        /* How to Participate */
+        .how-to {
+            background-color: #F8F9FA;
+            padding: 80px 24px;
+            margin-top: 80px;
+        }
+
+        .how-to-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .how-to h2 {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--color-primario);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 24px;
+            font-weight: 700;
+        }
+
+        .step h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            color: var(--color-texto-secundario);
+        }
+
+        /* Community */
+        .community {
+            padding: 80px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .community h2 {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .university-logos {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .university-logo {
+            width: 120px;
+            height: 120px;
+            background-color: var(--color-bordes);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--color-texto-secundario);
+            text-align: center;
+            padding: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--color-texto);
+            color: white;
+            padding: 48px 24px 24px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .footer h4 {
+            margin-bottom: 16px;
+            font-size: 18px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">🌱 EcoForo</div>
+            <nav class="nav">
+                <a href="#inicio">Inicio</a>
+                <a href="#categorias">Categorías</a>
+                <a href="#nosotros">Sobre Nosotros</a>
+            </nav>
+            <input type="search" class="search-bar" placeholder="Buscar ideas...">
+            <div class="auth-buttons">
+                <button class="btn btn-outline">Iniciar Sesión</button>
+                <button class="btn btn-primary">Registrarse</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1>Conectando Ideas, Construyendo Futuro</h1>
+            <p>Plataforma interuniversitaria donde estudiantes de TICs y Ambiental comparten proyectos innovadores para un mundo más sostenible</p>
+            <button class="btn btn-accent">Subir Mi Video</button>
+        </div>
+    </section>
+
+    <!-- Filters & Video Grid -->
+    <section class="filters">
+        <h2>Últimas Ideas</h2>
+        <div class="filter-tabs">
+            <div class="filter-tab active">Populares</div>
+            <div class="filter-tab">Recientes</div>
+            <div class="filter-tab">Ingeniería en TICs</div>
+            <div class="filter-tab eco">Ingeniería Ambiental</div>
+        </div>
+
+        <div class="video-grid">
+            <!-- Card 1 -->
+            <div class="video-card">
+                <div class="video-thumbnail">▶</div>
+                <h3>Sistema de Riego Inteligente IoT</h3>
+                <div class="video-meta">
+                    <span class="video-author">Por María González</span>
+                    <span class="video-tag tag-tics">TICs</span>
+                </div>
+                <div class="video-actions">
+                    <button class="vote-btn" onclick="toggleVote(this)">
+                        <span class="vote-icon">▲</span>
+                        <span class="vote-count">128</span>
+                    </button>
+                    <span style="color: var(--color-texto-secundario); font-size: 14px;">💬 24 comentarios</span>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="video-card">
+                <div class="video-thumbnail" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">▶</div>
+                <h3>Compostaje Comunitario Universitario</h3>
+                <div class="video-meta">
+                    <span class="video-author">Por Carlos Pérez</span>
+                    <span class="video-tag tag-ambiental">Ambiental</span>
+                </div>
+                <div class="video-actions">
+                    <button class="vote-btn" onclick="toggleVote(this)">
+                        <span class="vote-icon">▲</span>
+                        <span class="vote-count">95</span>
+                    </button>
+                    <span style="color: var(--color-texto-secundario); font-size: 14px;">💬 18 comentarios</span>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="video-card">
+                <div class="video-thumbnail" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">▶</div>
+                <h3>App de Carpooling Universitario</h3>
+                <div class="video-meta">
+                    <span class="video-author">Por Ana Martínez</span>
+                    <span class="video-tag tag-tics">TICs</span>
+                </div>
+                <div class="video-actions">
+                    <button class="vote-btn" onclick="toggleVote(this)">
+                        <span class="vote-icon">▲</span>
+                        <span class="vote-count">87</span>
+                    </button>
+                    <span style="color: var(--color-texto-secundario); font-size: 14px;">💬 15 comentarios</span>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="video-card">
+                <div class="video-thumbnail" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">▶</div>
+                <h3>Biodigestor para Residuos Orgánicos</h3>
+                <div class="video-meta">
+                    <span class="video-author">Por Luis Ramírez</span>
+                    <span class="video-tag tag-ambiental">Ambiental</span>
+                </div>
+                <div class="video-actions">
+                    <button class="vote-btn" onclick="toggleVote(this)">
+                        <span class="vote-icon">▲</span>
+                        <span class="vote-count">72</span>
+                    </button>
+                    <span style="color: var(--color-texto-secundario); font-size: 14px;">💬 12 comentarios</span>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="video-card">
+                <div class="video-thumbnail" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">▶</div>
+                <h3>Dashboard de Consumo Energético</h3>
+                <div class="video-meta">
+                    <span class="video-author">Por Sofia Torres</span>
+                    <span class="video-tag tag-tics">TICs</span>
+                </div>
+                <div class="video-actions">
+                    <button class="vote-btn" onclick="toggleVote(this)">
+                        <span class="vote-icon">▲</span>
+                        <span class="vote-count">64</span>
+                    </button>
+                    <span style="color: var(--color-texto-secundario); font-size: 14px;">💬 9 comentarios</span>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="video-card">
+                <div class="video-thumbnail" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">▶</div>
+                <h3>Huerto Vertical Automatizado</h3>
+                <div class="video-meta">
+                    <span class="video-author">Por Diego Morales</span>
+                    <span class="video-tag tag-ambiental">Ambiental</span>
+                </div>
+                <div class="video-actions">
+                    <button class="vote-btn" onclick="toggleVote(this)">
+                        <span class="vote-icon">▲</span>
+                        <span class="vote-count">58</span>
+                    </button>
+                    <span style="color: var(--color-texto-secundario); font-size: 14px;">💬 7 comentarios</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Participate -->
+    <section class="how-to">
+        <div class="how-to-container">
+            <h2>¿Cómo Participar?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">1</div>
+                    <h3>Regístrate</h3>
+                    <p>Crea tu cuenta con tu email universitario y únete a la comunidad</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon" style="background-color: var(--color-secundario);">2</div>
+                    <h3>Sube tu Video</h3>
+                    <p>Comparte tu proyecto o idea con un video corto y una descripción clara</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon" style="background-color: var(--color-acento);">3</div>
+                    <h3>Colabora</h3>
+                    <p>Vota, comenta y conecta con otros estudiantes para hacer crecer las ideas</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community -->
+    <section class="community">
+        <h2>Universidades Participantes</h2>
+        <div class="university-logos">
+            <div class="university-logo">Universidad Técnica Particular de Loja</div>
+            <div class="university-logo">Universidad Internacional del Ecuador</div>
+            <div class="university-logo">Universidad Nacional de Loja</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <h4>EcoForo</h4>
+                <p style="color: rgba(255, 255, 255, 0.7);">Conectando estudiantes por un futuro sostenible</p>
+            </div>
+            <div>
+                <h4>Enlaces</h4>
+                <div class="footer-links">
+                    <a href="#about">Sobre Nosotros</a>
+                    <a href="#faq">Preguntas Frecuentes</a>
+                    <a href="#contact">Contacto</a>
+                </div>
+            </div>
+            <div>
+                <h4>Legal</h4>
+                <div class="footer-links">
+                    <a href="#privacy">Política de Privacidad</a>
+                    <a href="#terms">Términos de Uso</a>
+                </div>
+            </div>
+            <div>
+                <h4>Síguenos</h4>
+                <div class="footer-links">
+                    <a href="#facebook">Facebook</a>
+                    <a href="#twitter">Twitter</a>
+                    <a href="#instagram">Instagram</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 EcoForo Interuniversitario. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <script>
+        function toggleVote(button) {
+            const countSpan = button.querySelector('.vote-count');
+            let count = parseInt(countSpan.textContent);
+            
+            if (button.classList.contains('voted')) {
+                button.classList.remove('voted');
+                countSpan.textContent = count - 1;
+            } else {
+                button.classList.add('voted');
+                countSpan.textContent = count + 1;
+            }
+        }
+
+        // Filter tabs functionality
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Logo click to scroll to top
+        document.querySelector('.logo').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
