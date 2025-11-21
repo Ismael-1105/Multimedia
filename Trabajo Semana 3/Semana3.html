@@ -69,27 +69,27 @@
             margin-top: 1rem;
         }
 
-        .info-box strong {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-        }
+            .info-box strong {
+                display: block;
+                margin-bottom: 0.5rem;
+                color: var(--text);
+            }
 
         .status-indicator {
             display: inline-block;
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background-color: #94a3b8; /* Gris por defecto */
+            background-color: #94a3b8;
             margin-right: 5px;
         }
 
         .status-loaded {
-            background-color: #22c55e; /* Verde si carga */
+            background-color: #22c55e;
         }
-        
+
         .status-error {
-            background-color: #ef4444; /* Rojo si falla */
+            background-color: #ef4444;
         }
 
         .controls-custom {
@@ -113,33 +113,41 @@
             gap: 5px;
         }
 
-        button:hover {
-            background-color: var(--primary-hover);
-        }
-        
-        button.secondary {
-            background-color: #64748b;
-        }
-        
-        button.secondary:hover {
-            background-color: #475569;
-        }
+            button:hover {
+                background-color: var(--primary-hover);
+            }
 
-        /* Nueva sección de subida de archivos */
+            button.secondary {
+                background-color: #64748b;
+            }
+
+                button.secondary:hover {
+                    background-color: #475569;
+                }
+
+        /* Sección de subida mejorada */
         .upload-area {
             border: 2px dashed var(--border);
             border-radius: 0.75rem;
-            padding: 1.5rem;
+            padding: 2rem 1.5rem;
             margin-bottom: 1.5rem;
             background-color: #f8fafc;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
             position: relative;
+            cursor: pointer;
         }
 
-        .upload-area:hover {
-            border-color: var(--primary);
-            background-color: #eff6ff;
-        }
+            .upload-area:hover {
+                border-color: var(--primary);
+                background-color: #eff6ff;
+                transform: translateY(-2px);
+            }
+
+            .upload-area.drag-over {
+                border-color: var(--primary);
+                background-color: #dbeafe;
+                border-style: solid;
+            }
 
         .upload-label {
             cursor: pointer;
@@ -148,15 +156,20 @@
             align-items: center;
             color: #64748b;
             font-size: 0.9rem;
+            pointer-events: none;
         }
 
         .upload-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 0.5rem;
             color: var(--primary);
+            transition: transform 0.2s;
         }
 
-        /* Ocultar el input real pero mantenerlo accesible */
+        .upload-area:hover .upload-icon {
+            transform: scale(1.1);
+        }
+
         input[type="file"] {
             opacity: 0;
             width: 100%;
@@ -167,6 +180,74 @@
             cursor: pointer;
         }
 
+        .file-info-card {
+            display: none;
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+            .file-info-card.active {
+                display: block;
+                animation: slideIn 0.3s ease;
+            }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .file-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .remove-btn {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+            .remove-btn:hover {
+                background-color: #dc2626;
+            }
+
+        .file-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
         code {
             background-color: #e2e8f0;
             padding: 2px 4px;
@@ -174,17 +255,31 @@
             font-family: monospace;
             color: #0f172a;
         }
-        
+
         .file-tag {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 3px 10px;
             border-radius: 12px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: bold;
-            margin-left: 5px;
             background-color: #e2e8f0;
-            color: #64748b;
+            color: #475569;
         }
+
+            .file-tag.wav {
+                background-color: #dbeafe;
+                color: #1e40af;
+            }
+
+            .file-tag.mp3 {
+                background-color: #fce7f3;
+                color: #9f1239;
+            }
+
+            .file-tag.ogg {
+                background-color: #dcfce7;
+                color: #166534;
+            }
     </style>
 </head>
 <body>
@@ -193,13 +288,26 @@
         <h1>Laboratorio de Audio Web</h1>
         <p class="subtitle">Sube tus exportaciones para probar calidad y tiempos de carga.</p>
 
-        <!-- Zona de carga de archivos -->
+        <!-- Zona de carga de archivos mejorada -->
         <div class="upload-area" id="dropZone">
-            <input type="file" id="audioInput" accept=".wav, .mp3, .ogg">
+            <input type="file" id="audioInput" accept=".wav, .mp3, .ogg, audio/wav, audio/mpeg, audio/ogg">
             <div class="upload-label">
                 <span class="upload-icon">📂</span>
                 <strong>Haz clic o arrastra tu archivo aquí</strong>
                 <span style="font-size: 0.8rem; margin-top: 5px;">Soporta: WAV, MP3, OGG (Máx 10MB sugerido)</span>
+            </div>
+        </div>
+
+        <!-- Tarjeta de información del archivo cargado -->
+        <div class="file-info-card" id="fileInfoCard">
+            <div class="file-info-header">
+                <span class="file-name" id="loadedFileName">archivo.wav</span>
+                <button class="remove-btn" onclick="removeFile()">✕ Quitar</button>
+            </div>
+            <div class="file-meta">
+                <span><span class="file-tag" id="loadedFileType">WAV</span></span>
+                <span>📦 <strong id="loadedFileSize">0 KB</strong></span>
+                <span>⏱️ <strong id="loadedDuration">0:00</strong></span>
             </div>
         </div>
 
@@ -220,17 +328,16 @@
         <div class="info-box">
             <strong>Monitor de Estado:</strong>
             <div style="margin-bottom: 8px;">
-                <span id="statusLight" class="status-indicator"></span> 
+                <span id="statusLight" class="status-indicator"></span>
                 <span id="statusText">Esperando archivo...</span>
             </div>
-            
+
             <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 10px 0;">
-            
-            <strong>Detalles del Archivo:</strong>
+
+            <strong>Información Técnica:</strong>
             <ul style="margin: 0; padding-left: 20px; list-style-type: circle;">
-                <li>Nombre: <span id="fileName">Ninguno</span> <span id="fileTypeBadge" class="file-tag">---</span></li>
-                <li>Tamaño: <span id="fileSize">0 KB</span></li>
-                <li>Duración: <span id="duration">0:00</span></li>
+                <li>Codec soportado: <span id="codecInfo">Verificando...</span></li>
+                <li>Estado del buffer: <span id="bufferState">Listo</span></li>
             </ul>
         </div>
     </div>
@@ -240,91 +347,183 @@
         const fileInput = document.getElementById('audioInput');
         const statusText = document.getElementById('statusText');
         const statusLight = document.getElementById('statusLight');
-        
-        // Elementos de información
-        const fileNameDisplay = document.getElementById('fileName');
-        const fileSizeDisplay = document.getElementById('fileSize');
-        const fileTypeBadge = document.getElementById('fileTypeBadge');
-        const durationDisplay = document.getElementById('duration');
+        const dropZone = document.getElementById('dropZone');
+        const fileInfoCard = document.getElementById('fileInfoCard');
+
+        // Elementos de información del archivo
+        const loadedFileName = document.getElementById('loadedFileName');
+        const loadedFileSize = document.getElementById('loadedFileSize');
+        const loadedFileType = document.getElementById('loadedFileType');
+        const loadedDuration = document.getElementById('loadedDuration');
+        const codecInfo = document.getElementById('codecInfo');
+
+        let currentFileUrl = null;
+
+        // Drag and Drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
 
         // Manejo de subida de archivos
-        fileInput.addEventListener('change', function(e) {
+        fileInput.addEventListener('change', function (e) {
             const file = e.target.files[0];
-            if (!file) return;
+            if (file) {
+                handleFile(file);
+            }
+        });
 
-            // Validar tipo de archivo (básico)
+        function handleFile(file) {
+            // Validar tipo de archivo
             const validTypes = ['audio/wav', 'audio/mpeg', 'audio/ogg', 'audio/x-wav', 'audio/mp3'];
-            if (!validTypes.includes(file.type) && !file.name.match(/\.(wav|mp3|ogg)$/i)) {
-                statusText.textContent = "Formato no reconocido. Intenta con WAV, MP3 o OGG.";
+            const isValidExtension = /\.(wav|mp3|ogg)$/i.test(file.name);
+
+            if (!validTypes.includes(file.type) && !isValidExtension) {
+                statusText.textContent = "⚠️ Formato no reconocido. Usa WAV, MP3 o OGG.";
                 statusLight.className = 'status-indicator status-error';
                 return;
             }
 
-            // Crear URL temporal (Blob)
-            const fileUrl = URL.createObjectURL(file);
-            
+            // Validar tamaño (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                statusText.textContent = "⚠️ Archivo muy grande. Máximo 10MB.";
+                statusLight.className = 'status-indicator status-error';
+                return;
+            }
+
+            // Limpiar URL anterior si existe
+            if (currentFileUrl) {
+                URL.revokeObjectURL(currentFileUrl);
+            }
+
+            // Crear URL temporal
+            currentFileUrl = URL.createObjectURL(file);
+
             // Cargar en el reproductor
-            audio.src = fileUrl;
+            audio.src = currentFileUrl;
             audio.load();
 
-            // Actualizar UI con datos del archivo
-            fileNameDisplay.textContent = file.name;
-            fileSizeDisplay.textContent = (file.size / 1024).toFixed(2) + " KB";
-            
-            // Determinar etiqueta de tipo
-            let typeLabel = "AUDIO";
-            if (file.name.toLowerCase().endsWith('.wav')) typeLabel = "WAV";
-            else if (file.name.toLowerCase().endsWith('.mp3')) typeLabel = "MP3";
-            else if (file.name.toLowerCase().endsWith('.ogg')) typeLabel = "OGG";
-            
-            fileTypeBadge.textContent = typeLabel;
-            
-            // Colores para los badges
-            if(typeLabel === 'WAV') fileTypeBadge.style.backgroundColor = '#dbeafe'; // Azul claro
-            if(typeLabel === 'MP3') fileTypeBadge.style.backgroundColor = '#fce7f3'; // Rosa claro
-            if(typeLabel === 'OGG') fileTypeBadge.style.backgroundColor = '#dcfce7'; // Verde claro
+            // Actualizar UI
+            loadedFileName.textContent = file.name;
+            loadedFileSize.textContent = (file.size / 1024).toFixed(2) + " KB";
 
-            statusText.textContent = "Archivo cargado localmente.";
+            // Determinar tipo y aplicar estilos
+            let typeLabel = "AUDIO";
+            let typeClass = "";
+
+            if (file.name.toLowerCase().endsWith('.wav')) {
+                typeLabel = "WAV";
+                typeClass = "wav";
+            } else if (file.name.toLowerCase().endsWith('.mp3')) {
+                typeLabel = "MP3";
+                typeClass = "mp3";
+            } else if (file.name.toLowerCase().endsWith('.ogg')) {
+                typeLabel = "OGG";
+                typeClass = "ogg";
+            }
+
+            loadedFileType.textContent = typeLabel;
+            loadedFileType.className = `file-tag ${typeClass}`;
+
+            // Mostrar tarjeta de información
+            fileInfoCard.classList.add('active');
+
+            statusText.textContent = "✅ Archivo cargado correctamente";
             statusLight.className = 'status-indicator status-loaded';
-        });
+
+            // Detectar codec
+            detectCodec(file.type || `audio/${typeLabel.toLowerCase()}`);
+        }
+
+        function removeFile() {
+            if (currentFileUrl) {
+                URL.revokeObjectURL(currentFileUrl);
+                currentFileUrl = null;
+            }
+
+            audio.pause();
+            audio.src = '';
+            fileInput.value = '';
+            fileInfoCard.classList.remove('active');
+
+            statusText.textContent = "Esperando archivo...";
+            statusLight.className = 'status-indicator';
+            loadedDuration.textContent = "0:00";
+            codecInfo.textContent = "Verificando...";
+        }
+
+        function detectCodec(mimeType) {
+            if (audio.canPlayType(mimeType)) {
+                codecInfo.textContent = `✓ ${mimeType.split('/')[1].toUpperCase()}`;
+            } else {
+                codecInfo.textContent = "⚠️ Codec no óptimo";
+            }
+        }
 
         // Eventos del Audio
         audio.addEventListener('loadedmetadata', () => {
             const minutes = Math.floor(audio.duration / 60);
             const seconds = Math.floor(audio.duration % 60);
-            durationDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            loadedDuration.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
         });
 
         audio.addEventListener('play', () => {
-            statusText.textContent = "Reproduciendo...";
+            statusText.textContent = "▶️ Reproduciendo...";
             statusLight.className = 'status-indicator status-loaded';
         });
 
         audio.addEventListener('pause', () => {
-            statusText.textContent = "Pausado.";
-            statusLight.style.backgroundColor = "#f59e0b"; // Ámbar
+            statusText.textContent = "⏸️ Pausado";
+            statusLight.style.backgroundColor = "#f59e0b";
+        });
+
+        audio.addEventListener('ended', () => {
+            statusText.textContent = "✓ Reproducción finalizada";
+            statusLight.className = 'status-indicator';
         });
 
         audio.addEventListener('error', (e) => {
-            statusText.textContent = "Error al decodificar el audio.";
+            statusText.textContent = "❌ Error al decodificar el audio";
             statusLight.className = 'status-indicator status-error';
-            console.error(e);
+            console.error('Error de audio:', e);
         });
 
         // Funciones de botones
         function playAudio() {
-            if (audio.readyState >= 2 || audio.src) {
+            if (audio.src) {
                 audio.play().catch(e => {
-                    statusText.textContent = "Haz clic para reproducir (Autoplay bloqueado).";
+                    statusText.textContent = "⚠️ Haz clic para reproducir (Autoplay bloqueado)";
+                    console.error('Error al reproducir:', e);
                 });
             } else {
-                statusText.textContent = "Primero carga un archivo.";
+                statusText.textContent = "⚠️ Primero carga un archivo";
             }
         }
 
         function pauseAudio() {
             audio.pause();
         }
+
+        // Limpiar URLs al cerrar la página
+        window.addEventListener('beforeunload', () => {
+            if (currentFileUrl) {
+                URL.revokeObjectURL(currentFileUrl);
+            }
+        });
     </script>
 </body>
 </html>
