@@ -1,0 +1,7 @@
+/* motion-kit/src/scss/_utilities.scss */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

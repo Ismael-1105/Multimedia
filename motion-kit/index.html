@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Motion Kit — Playground</title>
+<link rel="stylesheet" href="dist/motion.css">
+<style>
+  /* tiny page styling to demo */
+  body{ font-family:system-ui,Segoe UI,Roboto; background:#ffffff; color:var(--text); padding:2rem; }
+  .grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:1rem; align-items:start;}
+  .card{ background:var(--card-bg); padding:1rem; border-radius:.75rem;}
+  h2{ font-size:1rem; margin:0 0 .5rem 0; color:#cfe1ff; }
+  .space{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
+</style>
+</head>
+<body>
+  <h1>Motion UI Library — Playground</h1>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Feedback: Scale Button</h2>
+      <div class="space">
+        <button class="btn release-bounce u-anim-optimize ripple">Primary</button>
+        <button class="btn ripple" style="background:#10b981">Success</button>
+      </div>
+      <p style="font-size:.85rem;color:var(--ui-muted)">Presiona y suelta para ver el rebote y ripple.</p>
+    </div>
+
+    <div class="card">
+      <h2>Loaders</h2>
+      <div style="display:flex;gap:1rem;align-items:center;">
+        <div class="orbit-loader" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div>
+          <div class="skeleton-card">
+            <div class="skeleton avatar"></div>
+            <div>
+              <div class="skeleton line short"></div>
+              <div class="skeleton line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Transitions</h2>
+      <div class="space">
+        <div class="anim-fade-up card" style="padding:.6rem">Fade Up Element</div>
+        <div class="anim-pop card" style="padding:.6rem">Pop In</div>
+      </div>
+      <p style="font-size:.85rem;color:var(--ui-muted)">Baja la página o refresca para ver la intersección animada.</p>
+    </div>
+
+    <div class="card">
+      <h2>Progress (simulado)</h2>
+      <div style="width:260px;">
+        <div class="progress-track"><div id="pfill" class="progress-fill"></div></div>
+        <button id="start" class="btn" style="margin-top:.6rem">Simular carga</button>
+      </div>
+    </div>
+  </section>
+
+<script src="dist/motion.min.js"></script>
+<script>
+  // small simulated progress
+  document.getElementById('start').addEventListener('click', ()=>{
+    const fill = document.getElementById('pfill');
+    let v = 0;
+    const iv = setInterval(()=>{
+      v += Math.random()*18 + 8;
+      if (v>=100) { v=100; setProgress(fill, v); clearInterval(iv); setTimeout(()=> setProgress(fill, 0), 700);}
+      else setProgress(fill, v);
+    }, 360);
+  });
+  function setProgress(el, pct){ el.style.width = pct + '%'; }
+</script>
+</body>
+</html>

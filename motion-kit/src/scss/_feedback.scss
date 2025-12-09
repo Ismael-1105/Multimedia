@@ -1,0 +1,47 @@
+/* motion-kit/src/scss/_feedback.scss */
+
+/* BUTTONS */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .6rem 1rem;
+  border-radius: .5rem;
+  border: none;
+  font-weight: 600;
+  color: white;
+  background: var(--ui-accent);
+  cursor: pointer;
+  transition: transform var(--motion-duration-fast) var(--bezier-sharp);
+
+  &:active {
+    transform: scale(.96);
+    transition-duration: 80ms;
+  }
+
+  &.release-bounce {
+    transition-timing-function: var(--bezier-bounce);
+  }
+}
+
+/* RIPPLE */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple__circle {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: .35;
+  background: radial-gradient(circle,rgba(255,255,255,.9),rgba(255,255,255,.3),transparent);
+}
+
+.ripple__animate {
+  animation: ripple-grow 520ms var(--bezier-soft);
+}
+
+@keyframes ripple-grow {
+  to { transform: scale(14); opacity: 0; }
+}

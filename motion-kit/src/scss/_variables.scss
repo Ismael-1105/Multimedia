@@ -1,0 +1,13 @@
+/* motion-kit/src/scss/_variables.scss */
+:root {
+  --motion-duration-fast: 200ms;
+  --motion-duration-medium: 300ms;
+  --motion-duration-slow: 400ms;
+
+  --bezier-sharp: cubic-bezier(.2,.9,.3,1);
+  --bezier-soft: cubic-bezier(.22,.8,.35,1);
+  --bezier-bounce: cubic-bezier(.34,1.6,.64,1);
+
+  --ui-accent:#2563eb;
+  --ui-muted:#6b7280;
+}
